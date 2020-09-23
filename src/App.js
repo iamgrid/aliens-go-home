@@ -25,13 +25,10 @@ function App() {
 	});
 
 	React.useEffect(() => {
-		const interval = setInterval(() => {
-			dispatch({
-				type: c.actions.MOVE_OBJECTS,
-				mousePosition: canvasMousePosition,
-			});
-		}, 10);
-		return () => clearInterval(interval);
+		dispatch({
+			type: c.actions.MOVE_OBJECTS,
+			mousePosition: canvasMousePosition,
+		});
 	}, [canvasMousePosition]);
 
 	function trackMouse(event) {
