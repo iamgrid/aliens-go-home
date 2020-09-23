@@ -3,6 +3,7 @@ import "./App.css";
 import Canvas from "./components/Canvas";
 import c from "./utils/constants";
 import { getCanvasPosition } from "./utils/formulas";
+import useAnimationFrame from "./hooks/useAnimationFrame";
 import moveObjects from "./reducers/moveObjects";
 
 const initialState = {
@@ -24,7 +25,7 @@ function App() {
 		y: 0,
 	});
 
-	React.useEffect(() => {
+	useAnimationFrame(() => {
 		dispatch({
 			type: c.actions.MOVE_OBJECTS,
 			mousePosition: canvasMousePosition,
