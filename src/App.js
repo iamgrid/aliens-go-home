@@ -1,12 +1,20 @@
 import React from "react";
 import "./App.css";
+import Canvas from "./components/Canvas";
+
+const initialState = {
+	message: "test message",
+};
 
 function App() {
-	return (
-		<div className="App">
-			<header className="App-header">testing 1-2-3-4</header>
-		</div>
-	);
+	const [state, dispatch] = React.useReducer((state, action) => {
+		switch (action.type) {
+			default:
+				return state;
+		}
+	}, initialState);
+
+	return <Canvas />;
 }
 
 export default App;
