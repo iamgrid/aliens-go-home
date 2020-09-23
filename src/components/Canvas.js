@@ -1,4 +1,8 @@
 import React from "react";
+import Sky from "./Sky";
+import Ground from "./Ground";
+import CannonBase from "./CannonBase";
+import CannonPipe from "./CannonPipe";
 
 export default function Canvas() {
 	const viewBox = [
@@ -14,7 +18,10 @@ export default function Canvas() {
 			preserveAspectRatio="xMaxYMax none"
 			viewBox={viewBox}
 		>
-			<circle cx={0} cy={0} r={50} />
+			<Sky />
+			<Ground />
+			<CannonPipe rotation={45} />
+			<CannonBase />
 		</svg>
 	);
 }
