@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import useWindowSize from "../hooks/useWindowSize";
 import Sky from "./Sky";
 import Ground from "./Ground";
 import CannonBase from "./CannonBase";
@@ -12,18 +13,25 @@ import StartGame from "./StartGame";
 import Title from "./Title";
 
 export default function Canvas({ angle, trackMouse }) {
+	const [windowWidth, windowHeight] = useWindowSize();
+	const gameHeight = 1200;
 	const viewBox = [
 		window.innerWidth / -2,
-		100 - window.innerHeight,
+		100 - gameHeight,
 		window.innerWidth,
-		window.innerHeight,
+		gameHeight,
 	];
+	const canvasStyle = {
+		width: `${windowWidth}px`,
+		height: `${windowHeight}px`,
+	};
 
 	return (
 		<svg
 			id="aliens-go-home-canvas"
 			preserveAspectRatio="xMaxYMax none"
 			viewBox={viewBox}
+			style={canvasStyle}
 			onMouseMove={trackMouse}
 		>
 			<defs>
