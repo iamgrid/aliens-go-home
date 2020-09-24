@@ -8,7 +8,7 @@ import CannonPipe from "./CannonPipe";
 import CannonBall from "./CannonBall";
 import CurrentScore from "./CurrentScore";
 import FlyingObject from "./FlyingObject";
-// import Heart from "./Heart";
+import Heart from "./Heart";
 import StartGame from "./StartGame";
 import Title from "./Title";
 import c from "../utils/constants";
@@ -32,6 +32,16 @@ export default function Canvas({
 		height: `${windowHeight}px`,
 	};
 
+	const lives = [];
+
+	for (let i = 0; i < gameState.lives; i++) {
+		const heartPosition = {
+			x: -180 - i * 70,
+			y: 35,
+		};
+		lives.push(<Heart key={i} position={heartPosition} />);
+	}
+
 	return (
 		<svg
 			id="aliens-go-home-canvas"
@@ -47,22 +57,6 @@ export default function Canvas({
 				</filter>
 			</defs>
 			<Sky />
-			<Ground />
-			{gameState.started
-				? gameState.cannonBalls.map((cannonBall) => (
-						<CannonBall key={cannonBall.id} position={cannonBall.position} />
-				  ))
-				: null}
-			<CannonPipe rotation={angle} />
-			<CannonBase />
-			<CurrentScore score={15} />
-			{!gameState.started && (
-				<g>
-					<StartGame onClick={() => startGame()} />
-					<Title />
-				</g>
-			)}
-
 			{gameState.started && (
 				<g>
 					{gameState.flyingObjects.map((flyingObject) => (
@@ -73,6 +67,22 @@ export default function Canvas({
 					))}
 				</g>
 			)}
+			<Ground />
+			{gameState.started
+				? gameState.cannonBalls.map((cannonBall) => (
+						<CannonBall key={cannonBall.id} position={cannonBall.position} />
+				  ))
+				: null}
+			<CannonPipe rotation={angle} />
+			<CannonBase />
+			<CurrentScore score={gameState.kills} />
+			{!gameState.started && (
+				<g>
+					<StartGame onClick={() => startGame()} />
+					<Title />
+				</g>
+			)}
+			{lives}
 		</svg>
 	);
 }

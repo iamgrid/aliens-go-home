@@ -57,10 +57,8 @@ function App() {
 	}
 
 	function doShoot() {
-		if (state.gameState.started) {
-			console.log("boom");
+		if (state.gameState.started)
 			dispatch({ type: c.actions.SHOOT, mousePosition: canvasMousePosition });
-		}
 	}
 
 	return (

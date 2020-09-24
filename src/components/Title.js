@@ -48,7 +48,7 @@ export default function Title() {
 	};
 
 	return (
-		<g filter="url(#shadow)">
+		<g transform="translate(0,100)" filter="url(#shadow)">
 			<defs>
 				<path id="AliensPath" d={pathFromBezierCurve(aliensLineCurve)} />
 				<path id="GoHomePath" d={pathFromBezierCurve(goHomeLineCurve)} />

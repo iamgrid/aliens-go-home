@@ -19,6 +19,19 @@ export default function moveObjects(state, mousePosition) {
 		(object) => now - object.createdAt < 4000
 	);
 
+	const lostLife = state.gameState.flyingObjects.length > flyingObjects.length;
+	let lives = state.gameState.lives;
+	if (lostLife) {
+		lives--;
+	}
+
+	const started = lives > 0;
+	if (!started) {
+		flyingObjects = [];
+		cannonBalls = [];
+		lives = 3;
+	}
+
 	const objectsDestroyed = checkCollisions(cannonBalls, flyingObjects);
 	const cannonBallsDestroyed = objectsDestroyed.map(
 		(object) => object.cannonBallId
@@ -30,9 +43,12 @@ export default function moveObjects(state, mousePosition) {
 	cannonBalls = cannonBalls.filter((cannonBall) =>
 		cannonBallsDestroyed.indexOf(cannonBall.id)
 	);
+
 	flyingObjects = flyingObjects.filter((flyingDisc) =>
 		flyingDiscsDestroyed.indexOf(flyingDisc.id)
 	);
+
+	const kills = state.gameState.kills + flyingDiscsDestroyed.length;
 
 	// console.log(angle, mousePosition.x, mousePosition.y);
 
@@ -42,7 +58,10 @@ export default function moveObjects(state, mousePosition) {
 		gameState: {
 			...newState.gameState,
 			flyingObjects,
-			cannonBalls,
+			cannonBalls: [...cannonBalls],
+			lives,
+			started,
+			kills,
 		},
 	};
 }
