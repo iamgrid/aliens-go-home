@@ -8,6 +8,13 @@ import moveObjects from "./reducers/moveObjects";
 
 const initialState = {
 	angle: 45,
+	gameState: {
+		started: false,
+		kills: 0,
+		lives: 3,
+		flyingObjects: [],
+		lastObjectCreatedAt: new Date(),
+	},
 };
 
 function App() {
@@ -15,6 +22,11 @@ function App() {
 		switch (action.type) {
 			case c.actions.MOVE_OBJECTS:
 				return moveObjects(state, action.mousePosition);
+			case c.actions.START_GAME:
+				return {
+					...state,
+					gameState: { ...initialState.gameState, started: true },
+				};
 			default:
 				return state;
 		}
@@ -36,7 +48,18 @@ function App() {
 		setCanvasMousePosition(getCanvasPosition(event));
 	}
 
-	return <Canvas angle={state.angle} trackMouse={trackMouse} />;
+	function startGame() {
+		dispatch({ type: c.actions.START_GAME });
+	}
+
+	return (
+		<Canvas
+			angle={state.angle}
+			gameState={state.gameState}
+			startGame={startGame}
+			trackMouse={trackMouse}
+		/>
+	);
 }
 
 export default App;
