@@ -5,6 +5,7 @@ import c from "./utils/constants";
 import { getCanvasPosition } from "./utils/formulas";
 import useAnimationFrame from "./hooks/useAnimationFrame";
 import moveObjects from "./reducers/moveObjects";
+import shoot from "./reducers/shoot";
 
 const initialState = {
 	angle: 45,
@@ -14,6 +15,7 @@ const initialState = {
 		lives: 3,
 		flyingObjects: [],
 		lastObjectCreatedAt: new Date().getTime(),
+		cannonBalls: [],
 	},
 };
 
@@ -27,6 +29,8 @@ function App() {
 					...state,
 					gameState: { ...initialState.gameState, started: true },
 				};
+			case c.actions.SHOOT:
+				return shoot(state, action.mousePosition);
 			default:
 				return state;
 		}
@@ -52,12 +56,20 @@ function App() {
 		dispatch({ type: c.actions.START_GAME });
 	}
 
+	function doShoot() {
+		if (state.gameState.started) {
+			console.log("boom");
+			dispatch({ type: c.actions.SHOOT, mousePosition: canvasMousePosition });
+		}
+	}
+
 	return (
 		<Canvas
 			angle={state.angle}
 			gameState={state.gameState}
 			startGame={startGame}
 			trackMouse={trackMouse}
+			doShoot={doShoot}
 		/>
 	);
 }

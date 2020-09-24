@@ -18,6 +18,10 @@ export function radiansToDegrees(radians) {
 	return (radians * 180) / Math.PI;
 }
 
+export function degreesToRadian(degrees) {
+	return (degrees * Math.PI) / 180;
+}
+
 export function calculateAngle(x1, y1, x2, y2) {
 	// https://math.stackexchange.com/questions/714378/find-the-angle-that-creating-with-y-axis-in-degrees
 
@@ -44,4 +48,25 @@ export function getCanvasPosition(event) {
 	point.y = event.clientY;
 	const { x, y } = point.matrixTransform(svg.getScreenCTM().inverse());
 	return { x, y };
+}
+
+export function calculateNextPosition(x, y, angle, divisor = 300) {
+	const realAngle = angle * -1 + 90;
+	const stepsX =
+		radiansToDegrees(Math.cos(degreesToRadian(realAngle))) / divisor;
+	const stepsY =
+		radiansToDegrees(Math.sin(degreesToRadian(realAngle))) / divisor;
+	return {
+		x: x + stepsX,
+		y: y - stepsY,
+	};
+}
+
+export function checkCollision(rectA, rectB) {
+	return (
+		rectA.x1 < rectB.x2 &&
+		rectA.x2 > rectB.x1 &&
+		rectA.y1 < rectB.y2 &&
+		rectA.y2 > rectB.y1
+	);
 }

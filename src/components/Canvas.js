@@ -13,7 +13,13 @@ import StartGame from "./StartGame";
 import Title from "./Title";
 import c from "../utils/constants";
 
-export default function Canvas({ angle, gameState, startGame, trackMouse }) {
+export default function Canvas({
+	angle,
+	gameState,
+	startGame,
+	trackMouse,
+	doShoot,
+}) {
 	const [windowWidth, windowHeight] = useWindowSize();
 	const viewBox = [
 		window.innerWidth / -2,
@@ -33,6 +39,7 @@ export default function Canvas({ angle, gameState, startGame, trackMouse }) {
 			viewBox={viewBox}
 			style={canvasStyle}
 			onMouseMove={trackMouse}
+			onClick={doShoot}
 		>
 			<defs>
 				<filter id="shadow">
@@ -41,9 +48,13 @@ export default function Canvas({ angle, gameState, startGame, trackMouse }) {
 			</defs>
 			<Sky />
 			<Ground />
+			{gameState.started
+				? gameState.cannonBalls.map((cannonBall) => (
+						<CannonBall key={cannonBall.id} position={cannonBall.position} />
+				  ))
+				: null}
 			<CannonPipe rotation={angle} />
 			<CannonBase />
-			<CannonBall position={{ x: 0, y: -100 }} />
 			<CurrentScore score={15} />
 			{!gameState.started && (
 				<g>
@@ -84,4 +95,5 @@ Canvas.propTypes = {
 	}).isRequired,
 	trackMouse: PropTypes.func.isRequired,
 	startGame: PropTypes.func.isRequired,
+	doShoot: PropTypes.func.isRequired,
 };

@@ -2,6 +2,7 @@ const c = {
 	actions: {
 		MOVE_OBJECTS: "MOVE_OBJECTS",
 		START_GAME: "START_GAME",
+		SHOOT: "SHOOT",
 	},
 	skyAndGroundWidth: 5000,
 	gameWidth: 800,
