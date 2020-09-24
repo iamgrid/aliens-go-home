@@ -6,8 +6,7 @@ export default function createFlyingObjects(state) {
 	const now = new Date().getTime();
 	const { lastObjectCreatedAt, flyingObjects } = state.gameState;
 	const createNewObject =
-		now - lastObjectCreatedAt.getTime() >
-			c.flyingObjectSettings.createInterval &&
+		now - lastObjectCreatedAt > c.flyingObjectSettings.createInterval &&
 		flyingObjects.length < c.flyingObjectSettings.maxFlyingObjects;
 
 	if (!createNewObject) return state; // no need to create objects now
@@ -32,7 +31,7 @@ export default function createFlyingObjects(state) {
 		gameState: {
 			...state.gameState,
 			flyingObjects: [...state.gameState.flyingObjects, newFlyingObject],
-			lastObjectCreatedAt: new Date(),
+			lastObjectCreatedAt: new Date().getTime(),
 		},
 	};
 }

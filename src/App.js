@@ -13,7 +13,7 @@ const initialState = {
 		kills: 0,
 		lives: 3,
 		flyingObjects: [],
-		lastObjectCreatedAt: new Date(),
+		lastObjectCreatedAt: new Date().getTime(),
 	},
 };
 

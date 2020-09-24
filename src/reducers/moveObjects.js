@@ -9,10 +9,19 @@ export default function moveObjects(state, mousePosition) {
 
 	const newState = createFlyingObjects(state);
 
+	const now = new Date().getTime();
+	const flyingObjects = newState.gameState.flyingObjects.filter(
+		(object) => now - object.createdAt < 4000
+	);
+
 	// console.log(angle, mousePosition.x, mousePosition.y);
 
 	return {
 		...newState,
 		angle,
+		gameState: {
+			...newState.gameState,
+			flyingObjects,
+		},
 	};
 }

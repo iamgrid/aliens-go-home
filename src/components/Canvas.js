@@ -11,15 +11,15 @@ import FlyingObject from "./FlyingObject";
 // import Heart from "./Heart";
 import StartGame from "./StartGame";
 import Title from "./Title";
+import c from "../utils/constants";
 
 export default function Canvas({ angle, gameState, startGame, trackMouse }) {
 	const [windowWidth, windowHeight] = useWindowSize();
-	const gameHeight = 1200;
 	const viewBox = [
 		window.innerWidth / -2,
-		100 - gameHeight,
+		100 - c.gameHeight,
 		window.innerWidth,
-		gameHeight,
+		c.gameHeight,
 	];
 	const canvasStyle = {
 		width: `${windowWidth}px`,
