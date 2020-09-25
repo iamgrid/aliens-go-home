@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import Canvas from "./components/Canvas";
 import c from "./utils/constants";
 import { getCanvasPosition } from "./utils/formulas";
@@ -19,7 +18,7 @@ const initialState = {
 	},
 };
 
-const rootElement = document.documentElement;
+document.documentElement.style.setProperty(`--gameHeight`, `${c.gameHeight}px`);
 
 function App() {
 	const [state, dispatch] = React.useReducer((state, action) => {
@@ -42,10 +41,6 @@ function App() {
 		x: 0,
 		y: 0,
 	});
-
-	React.useLayoutEffect(() => {
-		rootElement.style.setProperty(`--gameHeight`, `${c.gameHeight}px`);
-	}, []);
 
 	useAnimationFrame(() => {
 		dispatch({
