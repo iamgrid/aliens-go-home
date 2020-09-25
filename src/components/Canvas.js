@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import useWindowSize from "../hooks/useWindowSize";
 import Sky from "./Sky";
 import Ground from "./Ground";
@@ -12,14 +11,67 @@ import Heart from "./Heart";
 import StartGame from "./StartGame";
 import Title from "./Title";
 import c from "../utils/constants";
+import { getCanvasPosition } from "../utils/formulas";
+import useAnimationFrame from "../hooks/useAnimationFrame";
+import moveObjects from "../reducers/moveObjects";
+import shoot from "../reducers/shoot";
 
-export default function Canvas({
-	angle,
-	gameState,
-	startGame,
-	trackMouse,
-	doShoot,
-}) {
+const initialState = {
+	angle: 45,
+	gameState: {
+		started: false,
+		kills: 0,
+		lives: 3,
+		flyingObjects: [],
+		lastObjectCreatedAt: new Date().getTime(),
+		cannonBalls: [],
+	},
+};
+
+document.documentElement.style.setProperty(`--gameHeight`, `${c.gameHeight}px`);
+
+export default function Canvas() {
+	const [state, dispatch] = React.useReducer((state, action) => {
+		switch (action.type) {
+			case c.actions.MOVE_OBJECTS:
+				return moveObjects(state, action.mousePosition);
+			case c.actions.START_GAME:
+				return {
+					...state,
+					gameState: { ...initialState.gameState, started: true },
+				};
+			case c.actions.SHOOT:
+				return shoot(state, action.mousePosition);
+			default:
+				return state;
+		}
+	}, initialState);
+
+	const [canvasMousePosition, setCanvasMousePosition] = React.useState({
+		x: 0,
+		y: 0,
+	});
+
+	useAnimationFrame(() => {
+		dispatch({
+			type: c.actions.MOVE_OBJECTS,
+			mousePosition: canvasMousePosition,
+		});
+	}, [canvasMousePosition]);
+
+	function trackMouse(event) {
+		setCanvasMousePosition(getCanvasPosition(event));
+	}
+
+	function startGame() {
+		dispatch({ type: c.actions.START_GAME });
+	}
+
+	function doShoot() {
+		if (state.gameState.started)
+			dispatch({ type: c.actions.SHOOT, mousePosition: canvasMousePosition });
+	}
+
 	const [windowWidth, windowHeight] = useWindowSize();
 	const viewBox = [
 		window.innerWidth / -2,
@@ -34,7 +86,7 @@ export default function Canvas({
 
 	const lives = [];
 
-	for (let i = 0; i < gameState.lives; i++) {
+	for (let i = 0; i < state.gameState.lives; i++) {
 		const heartPosition = {
 			x: -180 - i * 70,
 			y: 35,
@@ -57,9 +109,9 @@ export default function Canvas({
 				</filter>
 			</defs>
 			<Sky />
-			{gameState.started && (
+			{state.gameState.started && (
 				<g>
-					{gameState.flyingObjects.map((flyingObject) => (
+					{state.gameState.flyingObjects.map((flyingObject) => (
 						<FlyingObject
 							key={flyingObject.id}
 							position={flyingObject.position}
@@ -68,15 +120,15 @@ export default function Canvas({
 				</g>
 			)}
 			<Ground />
-			{gameState.started
-				? gameState.cannonBalls.map((cannonBall) => (
+			{state.gameState.started
+				? state.gameState.cannonBalls.map((cannonBall) => (
 						<CannonBall key={cannonBall.id} position={cannonBall.position} />
 				  ))
 				: null}
-			<CannonPipe rotation={angle} />
+			<CannonPipe rotation={state.angle} />
 			<CannonBase />
-			<CurrentScore score={gameState.kills} />
-			{!gameState.started && (
+			<CurrentScore score={state.gameState.kills} />
+			{!state.gameState.started && (
 				<g>
 					<StartGame onClick={() => startGame()} />
 					<Title />
@@ -86,24 +138,3 @@ export default function Canvas({
 		</svg>
 	);
 }
-
-Canvas.propTypes = {
-	angle: PropTypes.number.isRequired,
-	gameState: PropTypes.shape({
-		started: PropTypes.bool.isRequired,
-		kills: PropTypes.number.isRequired,
-		lives: PropTypes.number.isRequired,
-		flyingObjects: PropTypes.arrayOf(
-			PropTypes.shape({
-				position: PropTypes.shape({
-					x: PropTypes.number.isRequired,
-					y: PropTypes.number.isRequired,
-				}).isRequired,
-				id: PropTypes.number.isRequired,
-			})
-		).isRequired,
-	}).isRequired,
-	trackMouse: PropTypes.func.isRequired,
-	startGame: PropTypes.func.isRequired,
-	doShoot: PropTypes.func.isRequired,
-};
