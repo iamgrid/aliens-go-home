@@ -19,6 +19,8 @@ const initialState = {
 	},
 };
 
+const rootElement = document.documentElement;
+
 function App() {
 	const [state, dispatch] = React.useReducer((state, action) => {
 		switch (action.type) {
@@ -40,6 +42,10 @@ function App() {
 		x: 0,
 		y: 0,
 	});
+
+	React.useLayoutEffect(() => {
+		rootElement.style.setProperty(`--gameHeight`, `${c.gameHeight}px`);
+	}, []);
 
 	useAnimationFrame(() => {
 		dispatch({

@@ -32,7 +32,7 @@ export default function StartGame({ onClick }) {
 	return (
 		<g filter="url(#shadow)">
 			<rect {...button} />
-			<text {...text}>Tap To Start!</text>
+			<text {...text}>Start a New Game</text>
 		</g>
 	);
 }

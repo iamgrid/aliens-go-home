@@ -1,3 +1,7 @@
+:root {
+	--gameHeight: 500px;
+}
+
 html,
 body {
 	overflow: hidden;
@@ -12,4 +16,17 @@ body {
 		sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes flyingObjectAnimation {
+	0% {
+		transform: translateY(0);
+	}
+	100% {
+		transform: translateY(var(--gameHeight));
+	}
+}
+
+.flyingObjectContainer {
+	animation: flyingObjectAnimation 4s linear;
 }
